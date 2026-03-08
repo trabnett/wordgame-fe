@@ -22,7 +22,7 @@ class HomeScreen extends StatelessWidget {
             ),
             const SizedBox(height: 48),
             ElevatedButton(
-              onPressed: () => context.go('/game'),
+              onPressed: () => context.go('/login'),
               child: const Text('Play'),
             ),
           ],

@@ -1,5 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import '../services/auth_service.dart';
 import '../widgets/scrabble_tile.dart';
 
 class GameScreen extends StatefulWidget {
@@ -33,6 +35,24 @@ class _GameScreenState extends State<GameScreen> {
       appBar: AppBar(
         title: const Text('WordGame'),
         backgroundColor: const Color(0xFF16213E),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: Center(
+              child: GestureDetector(
+                onTap: () => context.go('/user'),
+                child: Text(
+                  'Hi, ${AuthService().firstName ?? 'Player'}',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    decoration: TextDecoration.underline,
+                    decorationColor: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
       body: Column(
         children: [
