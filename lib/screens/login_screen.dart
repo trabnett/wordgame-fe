@@ -35,7 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
       if (result['success'] == true) {
         final tokens = result['tokens'];
         final user = result['user'];
-        AuthService().login(
+        await AuthService().login(
           accessToken: tokens['access'],
           refreshToken: tokens['refresh'],
           firstName: user['first_name'],
