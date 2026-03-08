@@ -1,6 +1,7 @@
 import 'package:go_router/go_router.dart';
 import '../screens/welcome_screen.dart';
 import '../screens/home_screen.dart';
+import '../screens/game_screen.dart';
 import '../screens/not_found_screen.dart';
 
 final router = GoRouter(
@@ -14,6 +15,10 @@ final router = GoRouter(
     GoRoute(
       path: '/welcome',
       builder: (context, state) => const WelcomeScreen(),
+    ),
+    GoRoute(
+      path: '/game',
+      builder: (context, state) => const GameScreen(),
     ),
   ],
 );
