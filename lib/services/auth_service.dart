@@ -15,7 +15,14 @@ class AuthService {
 
   bool get isLoggedIn => _accessToken != null;
   String? get accessToken => _accessToken;
+  String? get refreshToken => _refreshToken;
   String? get firstName => _firstName;
+
+  Future<void> updateAccessToken(String token) async {
+    _accessToken = token;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_keyAccessToken, token);
+  }
 
   Future<void> init() async {
     final prefs = await SharedPreferences.getInstance();
