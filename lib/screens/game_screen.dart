@@ -46,6 +46,12 @@ class _GameScreenState extends State<GameScreen> {
               _status = data['status'];
             });
             break;
+          case 'game_update':
+            setState(() {
+              _boardSlots = List<String?>.from(data['board_state']);
+              _handLetters = List<String>.from(data['hand_letters']);
+            });
+            break;
           case 'game_over':
             setState(() {
               _status = 'completed';
@@ -61,6 +67,12 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   void _placeTile(int slotIndex, int handIndex) {
+    // Optimistic local update
+    setState(() {
+      _boardSlots[slotIndex] = _handLetters[handIndex];
+      _handLetters[handIndex] = '';
+    });
+
     _channel?.sink.add(jsonEncode({
       'type': 'place_tile',
       'slot_index': slotIndex,
