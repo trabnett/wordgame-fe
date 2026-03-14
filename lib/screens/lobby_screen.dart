@@ -124,7 +124,7 @@ class _LobbyScreenState extends State<LobbyScreen> {
                 ),
                 const SizedBox(height: 48),
 
-                // Create game button
+                // Start a new game
                 ElevatedButton.icon(
                   onPressed: _loading ? null : () => _createGame(),
                   icon: const Icon(Icons.play_arrow),
@@ -134,10 +134,24 @@ class _LobbyScreenState extends State<LobbyScreen> {
                           width: 20,
                           child: CircularProgressIndicator(strokeWidth: 2),
                         )
-                      : const Text('Create Game'),
+                      : const Text('Start a Game'),
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     textStyle: const TextStyle(fontSize: 18),
+                  ),
+                ),
+                const SizedBox(height: 16),
+
+                // Find a game
+                ElevatedButton.icon(
+                  onPressed: () => context.go('/find'),
+                  icon: const Icon(Icons.search),
+                  label: const Text('Find a Game'),
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    textStyle: const TextStyle(fontSize: 18),
+                    backgroundColor: const Color(0xFF16213E),
+                    foregroundColor: Colors.white,
                   ),
                 ),
                 const SizedBox(height: 32),

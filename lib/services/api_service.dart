@@ -37,6 +37,17 @@ class ApiService {
     return jsonDecode(response.body);
   }
 
+  Future<Map<String, dynamic>> joinGame(String accessToken, int gameId) async {
+    final response = await http.post(
+      Uri.parse('$apiBaseUrl/game/$gameId/join/'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $accessToken',
+      },
+    );
+    return jsonDecode(response.body);
+  }
+
   Future<Map<String, dynamic>> getUserProfile(String accessToken) async {
     final response = await http.get(
       Uri.parse('$apiBaseUrl/user/'),

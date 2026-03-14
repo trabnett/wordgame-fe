@@ -4,6 +4,7 @@ import '../screens/home_screen.dart';
 import '../screens/login_screen.dart';
 import '../screens/lobby_screen.dart';
 import '../screens/waiting_screen.dart';
+import '../screens/find_game_screen.dart';
 import '../screens/game_screen.dart';
 import '../screens/user_screen.dart';
 import '../screens/not_found_screen.dart';
@@ -20,7 +21,7 @@ final router = GoRouter(
       return '/lobby';
     }
 
-    if (!loggedIn && (path.startsWith('/lobby') || path.startsWith('/game') || path.startsWith('/waiting') || path == '/user')) {
+    if (!loggedIn && (path.startsWith('/lobby') || path.startsWith('/game') || path.startsWith('/waiting') || path == '/find' || path == '/user')) {
       return '/login';
     }
 
@@ -44,6 +45,10 @@ final router = GoRouter(
       builder: (context, state) => const LobbyScreen(),
     ),
     GoRoute(
+      path: '/find',
+      builder: (context, state) => const FindGameScreen(),
+    ),
+    GoRoute(
       path: '/waiting/:gameId',
       builder: (context, state) => WaitingScreen(
         gameId: int.parse(state.pathParameters['gameId']!),
@@ -51,7 +56,9 @@ final router = GoRouter(
     ),
     GoRoute(
       path: '/game/:gameId',
-      builder: (context, state) => const GameScreen(),
+      builder: (context, state) => GameScreen(
+        gameId: int.parse(state.pathParameters['gameId']!),
+      ),
     ),
     GoRoute(
       path: '/user',
