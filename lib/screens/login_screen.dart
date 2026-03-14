@@ -40,7 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
           refreshToken: tokens['refresh'],
           firstName: user['first_name'],
         );
-        context.go('/game');
+        context.go('/lobby');
       } else {
         setState(() {
           _errorMessage = result['message'] ?? 'Login failed.';

@@ -21,6 +21,22 @@ class ApiService {
     return jsonDecode(response.body);
   }
 
+  Future<Map<String, dynamic>> createGame(String accessToken, {String? phoneNumber}) async {
+    final body = <String, dynamic>{};
+    if (phoneNumber != null && phoneNumber.isNotEmpty) {
+      body['phone_number'] = phoneNumber;
+    }
+    final response = await http.post(
+      Uri.parse('$apiBaseUrl/game/'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $accessToken',
+      },
+      body: jsonEncode(body),
+    );
+    return jsonDecode(response.body);
+  }
+
   Future<Map<String, dynamic>> getUserProfile(String accessToken) async {
     final response = await http.get(
       Uri.parse('$apiBaseUrl/user/'),
