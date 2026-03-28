@@ -89,6 +89,15 @@ class ApiService {
     return jsonDecode(response.body);
   }
 
+  Future<Map<String, dynamic>> emailLogin(String email) async {
+    final response = await http.post(
+      Uri.parse('$apiBaseUrl/login/email/'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'email': email}),
+    );
+    return jsonDecode(response.body);
+  }
+
   Future<Map<String, dynamic>> register({
     required String phoneNumber,
     required String firstName,

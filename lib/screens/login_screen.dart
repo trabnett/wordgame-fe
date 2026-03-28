@@ -13,13 +13,19 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final ApiService _apiService = ApiService();
   final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   String? _errorMessage;
   bool _loading = false;
+  bool _useEmail = false;
 
   Future<void> _handleLogin() async {
-    final phone = _phoneController.text.trim();
-    if (phone.isEmpty) {
-      setState(() => _errorMessage = 'Please enter a phone number.');
+    final input = _useEmail
+        ? _emailController.text.trim()
+        : _phoneController.text.trim();
+
+    if (input.isEmpty) {
+      setState(() => _errorMessage =
+          _useEmail ? 'Please enter an email.' : 'Please enter a phone number.');
       return;
     }
 
@@ -29,7 +35,9 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     try {
-      final result = await _apiService.phoneLogin(phone);
+      final result = _useEmail
+          ? await _apiService.emailLogin(input)
+          : await _apiService.phoneLogin(input);
       if (!mounted) return;
 
       if (result['success'] == true) {
@@ -42,7 +50,10 @@ class _LoginScreenState extends State<LoginScreen> {
         );
         context.go('/lobby');
       } else if (result['registered'] == false) {
-        context.go('/register', extra: result['phone_number']);
+        final extra = _useEmail
+            ? {'email': result['email']}
+            : {'phone_number': result['phone_number']};
+        context.go('/register', extra: extra);
       } else {
         setState(() {
           _errorMessage = result['message'] ?? 'Login failed.';
@@ -60,6 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void dispose() {
     _phoneController.dispose();
+    _emailController.dispose();
     super.dispose();
   }
 
@@ -81,32 +93,53 @@ class _LoginScreenState extends State<LoginScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  'Enter your phone number',
+                  _useEmail ? 'Enter your email' : 'Enter your phone number',
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                     color: Colors.white,
                   ),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 32),
-                TextField(
-                  controller: _phoneController,
-                  keyboardType: TextInputType.phone,
-                  style: const TextStyle(color: Colors.white),
-                  decoration: InputDecoration(
-                    hintText: '+1234567890',
-                    hintStyle: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.4),
+                if (_useEmail)
+                  TextField(
+                    controller: _emailController,
+                    keyboardType: TextInputType.emailAddress,
+                    style: const TextStyle(color: Colors.white),
+                    decoration: InputDecoration(
+                      hintText: 'you@example.com',
+                      hintStyle: TextStyle(
+                        color: Colors.white.withValues(alpha: 0.4),
+                      ),
+                      prefixIcon: const Icon(Icons.email, color: Colors.grey),
+                      filled: true,
+                      fillColor: const Color(0xFF16213E),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide.none,
+                      ),
                     ),
-                    prefixIcon: const Icon(Icons.phone, color: Colors.grey),
-                    filled: true,
-                    fillColor: const Color(0xFF16213E),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide.none,
+                    onSubmitted: (_) => _handleLogin(),
+                  )
+                else
+                  TextField(
+                    controller: _phoneController,
+                    keyboardType: TextInputType.phone,
+                    style: const TextStyle(color: Colors.white),
+                    decoration: InputDecoration(
+                      hintText: '+1234567890',
+                      hintStyle: TextStyle(
+                        color: Colors.white.withValues(alpha: 0.4),
+                      ),
+                      prefixIcon: const Icon(Icons.phone, color: Colors.grey),
+                      filled: true,
+                      fillColor: const Color(0xFF16213E),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide.none,
+                      ),
                     ),
+                    onSubmitted: (_) => _handleLogin(),
                   ),
-                  onSubmitted: (_) => _handleLogin(),
-                ),
                 if (_errorMessage != null) ...[
                   const SizedBox(height: 16),
                   Text(
@@ -125,6 +158,19 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: CircularProgressIndicator(strokeWidth: 2),
                         )
                       : const Text('Login'),
+                ),
+                const SizedBox(height: 16),
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      _useEmail = !_useEmail;
+                      _errorMessage = null;
+                    });
+                  },
+                  child: Text(
+                    _useEmail ? 'Use phone number instead' : 'Use email instead',
+                    style: const TextStyle(color: Colors.grey),
+                  ),
                 ),
               ],
             ),

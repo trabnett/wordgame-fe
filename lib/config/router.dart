@@ -43,9 +43,13 @@ final router = GoRouter(
     ),
     GoRoute(
       path: '/register',
-      builder: (context, state) => RegisterScreen(
-        phoneNumber: state.extra as String,
-      ),
+      builder: (context, state) {
+        final extra = state.extra as Map<String, String>? ?? {};
+        return RegisterScreen(
+          phoneNumber: extra['phone_number'],
+          email: extra['email'],
+        );
+      },
     ),
     GoRoute(
       path: '/lobby',
