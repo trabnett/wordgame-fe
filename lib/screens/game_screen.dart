@@ -109,6 +109,13 @@ class _GameScreenState extends State<GameScreen> {
     setState(() => _error = null);
   }
 
+  void _dumpHand() {
+    _channel?.sink.add(jsonEncode({
+      'type': 'dump_hand',
+    }));
+    setState(() => _error = null);
+  }
+
   @override
   void dispose() {
     _channel?.sink.close();
@@ -383,6 +390,19 @@ class _GameScreenState extends State<GameScreen> {
               child: const Text('Play', style: TextStyle(fontSize: 16)),
             ),
           ],
+        ),
+        const SizedBox(height: 8),
+        OutlinedButton(
+          onPressed: _dumpHand,
+          style: OutlinedButton.styleFrom(
+            foregroundColor: Colors.redAccent,
+            side: const BorderSide(color: Colors.redAccent),
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+          child: const Text('Dump Hand'),
         ),
         if (_error != null)
           Padding(
