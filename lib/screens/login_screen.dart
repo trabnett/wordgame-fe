@@ -41,6 +41,8 @@ class _LoginScreenState extends State<LoginScreen> {
           firstName: user['first_name'],
         );
         context.go('/lobby');
+      } else if (result['registered'] == false) {
+        context.go('/register', extra: result['phone_number']);
       } else {
         setState(() {
           _errorMessage = result['message'] ?? 'Login failed.';

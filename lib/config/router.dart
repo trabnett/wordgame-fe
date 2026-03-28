@@ -7,6 +7,7 @@ import '../screens/waiting_screen.dart';
 import '../screens/find_game_screen.dart';
 import '../screens/game_screen.dart';
 import '../screens/user_screen.dart';
+import '../screens/register_screen.dart';
 import '../screens/not_found_screen.dart';
 import '../services/auth_service.dart';
 
@@ -39,6 +40,12 @@ final router = GoRouter(
     GoRoute(
       path: '/login',
       builder: (context, state) => const LoginScreen(),
+    ),
+    GoRoute(
+      path: '/register',
+      builder: (context, state) => RegisterScreen(
+        phoneNumber: state.extra as String,
+      ),
     ),
     GoRoute(
       path: '/lobby',
