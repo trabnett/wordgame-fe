@@ -19,7 +19,7 @@ jobs:
       - name: Build Flutter web
         run: |
           flutter pub get
-          flutter build web --release --base-href /
+          flutter build web --release --base-href / --web-renderer html
 
       - name: Deploy to EC2
         uses: appleboy/scp-action@v0.1.7
