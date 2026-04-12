@@ -4,7 +4,10 @@ import '../services/api_service.dart';
 import '../services/auth_service.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  final String? next;
+  final String? phone;
+
+  const LoginScreen({super.key, this.next, this.phone});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -12,9 +15,15 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final ApiService _apiService = ApiService();
-  final TextEditingController _phoneController = TextEditingController();
+  late final TextEditingController _phoneController;
   String? _errorMessage;
   bool _loading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _phoneController = TextEditingController(text: widget.phone);
+  }
 
   Future<void> _handleLogin() async {
     final phone = _phoneController.text.trim();
@@ -40,9 +49,12 @@ class _LoginScreenState extends State<LoginScreen> {
           refreshToken: tokens['refresh'],
           firstName: user['first_name'],
         );
-        context.go('/lobby');
+        context.go(widget.next ?? '/lobby');
       } else if (result['registered'] == false) {
-        context.go('/register', extra: result['phone_number']);
+        context.go('/register', extra: {
+          'phoneNumber': result['phone_number'] as String,
+          'next': widget.next,
+        });
       } else {
         setState(() {
           _errorMessage = result['message'] ?? 'Login failed.';

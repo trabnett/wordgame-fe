@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import '../config/constants.dart';
+import '../services/api_service.dart';
 import '../services/auth_service.dart';
 
 class WaitingScreen extends StatefulWidget {
@@ -15,12 +16,27 @@ class WaitingScreen extends StatefulWidget {
 }
 
 class _WaitingScreenState extends State<WaitingScreen> {
+  final ApiService _apiService = ApiService();
   WebSocketChannel? _channel;
 
   @override
   void initState() {
     super.initState();
     _connectWebSocket();
+    _tryJoinGame();
+  }
+
+  Future<void> _tryJoinGame() async {
+    try {
+      final token = AuthService().accessToken!;
+      final result = await _apiService.joinGame(token, widget.gameId);
+      if (!mounted) return;
+
+      if (result['success'] == true) {
+        context.go('/game/${widget.gameId}');
+      }
+      // If join fails (e.g. we're the creator), just keep waiting
+    } catch (_) {}
   }
 
   void _connectWebSocket() {

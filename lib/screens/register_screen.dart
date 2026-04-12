@@ -5,8 +5,9 @@ import '../services/auth_service.dart';
 
 class RegisterScreen extends StatefulWidget {
   final String phoneNumber;
+  final String? next;
 
-  const RegisterScreen({super.key, required this.phoneNumber});
+  const RegisterScreen({super.key, required this.phoneNumber, this.next});
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
@@ -55,7 +56,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           refreshToken: tokens['refresh'],
           firstName: user['first_name'],
         );
-        context.go('/lobby');
+        context.go(widget.next ?? '/lobby');
       } else {
         setState(() {
           _errorMessage = result['message'] ?? 'Registration failed.';

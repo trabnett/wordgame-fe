@@ -23,7 +23,7 @@ final router = GoRouter(
     }
 
     if (!loggedIn && (path.startsWith('/lobby') || path.startsWith('/game') || path.startsWith('/waiting') || path == '/find' || path == '/user')) {
-      return '/login';
+      return '/login?next=$path';
     }
 
     return null;
@@ -39,13 +39,21 @@ final router = GoRouter(
     ),
     GoRoute(
       path: '/login',
-      builder: (context, state) => const LoginScreen(),
+      builder: (context, state) {
+        final next = state.uri.queryParameters['next'];
+        final phone = state.uri.queryParameters['phone'];
+        return LoginScreen(next: next, phone: phone);
+      },
     ),
     GoRoute(
       path: '/register',
-      builder: (context, state) => RegisterScreen(
-        phoneNumber: state.extra as String,
-      ),
+      builder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>;
+        return RegisterScreen(
+          phoneNumber: extra['phoneNumber'] as String,
+          next: extra['next'] as String?,
+        );
+      },
     ),
     GoRoute(
       path: '/lobby',
