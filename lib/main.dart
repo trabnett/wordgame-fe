@@ -7,16 +7,16 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   usePathUrlStrategy();
   await AuthService().init();
-  runApp(const WordGameApp());
+  runApp(const MarangaApp());
 }
 
-class WordGameApp extends StatelessWidget {
-  const WordGameApp({super.key});
+class MarangaApp extends StatelessWidget {
+  const MarangaApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'WordGame',
+      title: 'Maranga',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(

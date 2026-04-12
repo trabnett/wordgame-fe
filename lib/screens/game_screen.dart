@@ -129,7 +129,7 @@ class _GameScreenState extends State<GameScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFF1A1A2E),
       appBar: AppBar(
-        title: const Text('WordGame'),
+        title: const Text('Maranga'),
         backgroundColor: const Color(0xFF16213E),
         actions: [
           Padding(
